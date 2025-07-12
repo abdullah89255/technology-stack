@@ -387,5 +387,5 @@ https://cnn.com               | AkamaiGHost, React, JavaScript, Google-Analytics
 
 ---
 
-Would you like a **Python version** of this with CSV and colored table output?
+
 
