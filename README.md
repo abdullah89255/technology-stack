@@ -293,5 +293,99 @@ WordPress.com [200 OK] Country[US], IP[192.0.78.17], PHP[8.0.28], WordPress, Goo
 
 ---
 
-Would you like a **script** that can scan multiple websites and show technologies side-by-side in a table? I can write one in Python or Bash depending on your preference.
+Here's a **Bash script** that uses `whatweb` to scan a list of websites and show the technologies used side-by-side in a clean table format.
+
+---
+
+### ✅ **Requirements**
+
+* Kali Linux or any Linux with:
+
+  * `whatweb` installed
+  * `column`, `awk`, and `sed` (usually preinstalled)
+
+---
+
+### ✅ **Step-by-step:**
+
+#### 📝 1. Create a list of websites
+
+Save this as `websites.txt`:
+
+```
+https://example.com
+https://github.com
+https://wordpress.com
+https://shopify.com
+https://cnn.com
+```
+
+#### 📜 2. Bash Script: `tech-scanner.sh`
+
+```bash
+#!/bin/bash
+
+# File with list of websites
+INPUT="websites.txt"
+
+# Header
+printf "%-30s | %s\n" "Website" "Technologies Detected"
+printf "%-30s-+-%s\n" "$(printf '%.0s-' {1..30})" "$(printf '%.0s-' {1..60})"
+
+# Loop through each site
+while IFS= read -r site; do
+    if [[ -n "$site" ]]; then
+        # Use WhatWeb to get brief result
+        tech=$(whatweb --quiet --color=never "$site" | sed "s|$site ||" | cut -c1-60)
+        printf "%-30s | %s\n" "$site" "$tech"
+    fi
+done < "$INPUT"
+```
+
+---
+
+### ✅ **How to Run It**
+
+1. Make script executable:
+
+   ```bash
+   chmod +x tech-scanner.sh
+   ```
+
+2. Run it:
+
+   ```bash
+   ./tech-scanner.sh
+   ```
+
+---
+
+### ✅ **Example Output**
+
+```
+Website                        | Technologies Detected
+------------------------------+------------------------------------------------------------
+https://example.com           | Country[US], Apache[2.4.29], HTML5, HTTPServer[Apache]
+https://github.com            | GitHub Pages, Ruby, jQuery, Bootstrap, Google-Analytics
+https://wordpress.com         | WordPress, PHP[8.0.28], Jetpack, Google-Analytics
+https://shopify.com           | Shopify, Cloudflare, HTML5, JavaScript
+https://cnn.com               | AkamaiGHost, React, JavaScript, Google-Analytics
+```
+
+---
+
+### ✅ Optional Improvements
+
+* Export to CSV:
+  Add this line inside the loop:
+
+  ```bash
+  echo "$site,$tech" >> output.csv
+  ```
+
+* Add `-a 3` flag to `whatweb` for aggressive scanning (slower but deeper).
+
+---
+
+Would you like a **Python version** of this with CSV and colored table output?
 
